@@ -1,16 +1,20 @@
 # JEP文档-中文翻译
 
-## 说明信息
+## 翻译说明
 
-本仓库翻译JEP文档, 目录暂定为:
+本仓库翻译JEP文档。
+
+文件命名模式: `JEP_num/JEP_num_lang.md`, 参考 Chrome 浏览器的请求头: `accept-language: en,zh-CN`, 各个部分之间以下划线分隔。
+
+目录示例:
 
 ```
 |-- 本文档根目录
    |-- README.md 
    |-- JEP_0
       |-- README.md
-      |-- JEP_0_EN.md
-      |-- JEP_0_ZH_CN.md
+      |-- JEP_0_en.md
+      |-- JEP_0_zh_CN.md
 ```
 
 
