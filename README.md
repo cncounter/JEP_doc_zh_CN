@@ -1,5 +1,9 @@
 # JEP文档-中文翻译
 
+JEP表示的含义为: JDK增强提案(JDK Enhancement-Proposal)。
+
+JEP主要是写给JVM实现者参考的; 但开发者如果想要深入了解JVM, 这是其中的一项基本功。
+
 ## 翻译说明
 
 本仓库翻译JEP文档。
@@ -16,6 +20,10 @@
       |-- JEP_0_en.md
       |-- JEP_0_zh_CN.md
 ```
+
+## 目录
+
+JEP0 实际上就是JEP文档目录, 目录信息请参阅: [JEP_0](./JEP_0/)
 
 
 
