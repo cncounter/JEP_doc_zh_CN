@@ -278,7 +278,7 @@
 | F    | Clo  | 14   | hotspot        | /    | runtime             | 358  | [Helpful NullPointerExceptions](https://openjdk.org/jeps/358) |
 | F    | Clo  | 14   | spec           | /    | lang                | 359  | [Records (Preview)](https://openjdk.org/jeps/359)            |
 | F    | Clo  | 15   | spec           | /    | lang                | 360  | [Sealed Classes (Preview)](https://openjdk.org/jeps/360)     |
-| F    | Clo  | 14   | spec           | /    | lang                | 361  | [Switch Expressions](https://openjdk.org/jeps/361)           |
+| F    | Clo  | 14   | spec           | /    | lang                | 361  | [Switch Expressions](../JEP_361/)           |
 | F    | Clo  | 14   | —              | /    | —                   | 362  | [Deprecate the Solaris and SPARC Ports](https://openjdk.org/jeps/362) |
 | F    | Clo  | 14   | hotspot        | /    | gc                  | 363  | [Remove the Concurrent Mark Sweep (CMS) Garbage Collector](https://openjdk.org/jeps/363) |
 | F    | Clo  | 14   | hotspot        | /    | gc                  | 364  | [ZGC on macOS (Experimental)](https://openjdk.org/jeps/364)  |
