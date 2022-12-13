@@ -2,6 +2,10 @@
 
 JEP表示的含义为: JDK增强提案(JDK Enhancement-Proposal)。
 
+为什么是JDK增强提案，而不是Java增强提案呢? 因为JEP不仅仅是Java API的迭代变更，也包括JVM，还有Java工具的增强。 
+
+按照普遍的划分方法: JDK = JVM + Tools + JRE; JRE主要就是Java语言的API,以及对应的支持库。
+
 JEP主要是写给JVM实现者参考的; 但开发者如果想要深入了解JVM, 这是其中的一项基本功。
 
 ## 翻译说明

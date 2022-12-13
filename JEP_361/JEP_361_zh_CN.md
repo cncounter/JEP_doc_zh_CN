@@ -1,4 +1,4 @@
-# JEP 361: switch语句增强
+# JEP 361: switch增强
 
 
 | 文档信息     | 值 |
@@ -35,8 +35,6 @@
 
 ## 历史(History)
 
-Switch expressions were [proposed in December 2017](https://mail.openjdk.java.net/pipermail/amber-dev/2017-December/002412.html) by [JEP 325](https://openjdk.java.net/jeps/325). JEP 325 was [targeted to JDK 12 in August 2018](https://mail.openjdk.java.net/pipermail/jdk-dev/2018-August/001827.html) as a [preview feature](https://openjdk.java.net/jeps/12). One aspect of JEP 325 was the overloading of the `break` statement to return a result value from a switch expression. Feedback on JDK 12 suggested that this use of `break` was confusing. In response to the feedback, [JEP 354](https://openjdk.java.net/jeps/354) was created as an evolution of JEP 325. JEP 354 proposed a new statement, `yield`, and restored the original meaning of `break`. JEP 354 was [targeted to JDK 13 in June 2019](https://mail.openjdk.java.net/pipermail/jdk-dev/2019-June/003052.html) as a preview feature. Feedback on JDK 13 suggested that switch expressions were ready to become final and permanent in JDK 14 with no further changes.
-
 
 switch表达式, 最早是在 [2017年12月](https://mail.openjdk.java.net/pipermail/amber-dev/2017-December/002412.html) 的 [JEP 325](https://openjdk.java.net/jeps/325) 中提出的。 JEP 325 成为 [2018年8月份JDK 12](https://mail.openjdk.java.net/pipermail/jdk-dev/2018-August/001827.html)的目标 [预览功能](http://openjdk.java.net/jeps/12)。
 JEP 325 中有一个特性是重载 `break` 语句, 以从 switch 表达式返回结果值。 对 JDK 12 的反馈表明，这种 `break` 的使用很令人困惑。  作为对反馈的回应，创建了 [JEP 354](https://openjdk.java.net/jeps/354) 提案, 作为JEP 325的迭代。
@@ -45,11 +43,17 @@ JEP 354 成为 [2019年6月JDK 13](https://mail.openjdk.java.net/pipermail/jdk-d
 JDK 13 相关的反馈表明, `switch` 表达式已准备好在 JDK 14 中成为最终的和永久的功能特征, 不再需要更改。
 
 
-## Motivation
+## 目的(Motivation)
 
-As we prepare to enhance the Java programming language to support [pattern matching (JEP 305)](https://openjdk.java.net/jeps/305), several irregularities of the existing `switch` statement -- which have long been an irritation to users -- become impediments. These include the default control flow behavior between switch labels (fall through), the default scoping in switch blocks (the whole block is treated as one scope), and the fact that `switch` works only as a statement, even though it is often more natural to express multi-way conditionals as expressions.
+在进行Java编程语言增强以支持 [模式匹配 (JEP 305)](https://openjdk.java.net/jeps/305) 的准备时，我们发现之前的 `switch` 语句有些不太好的地方, 一直饱受诟病, 也成为了我们的阻碍。 
+包括:
 
-The current design of Java's `switch` statement follows closely languages such as C and C++, and supports fall through semantics by default. Whilst this traditional control flow is often useful for writing low-level code (such as parsers for binary encodings), as `switch` is used in higher-level contexts, its error-prone nature starts to outweigh its flexibility. For example, in the following code, the many `break` statements make it unnecessarily verbose, and this visual noise often masks hard to debug errors, where missing `break` statements would mean accidental fall through.
+- 多个 `switch` 标签之间的默认控制流行为（fall through）
+- `switch` 块中的默认作用域范围（整个块被视为一个作用域范围）, 
+- `switch` 仅仅只是一个语句, 即使它经常被用来作为一种更自然的多路条件表达式。
+
+Java语言中的 `switch` 语句, 目前的设计紧跟 C、C++ 等语言，默认支持 fall through 语义。  虽然这种传统的控制流, 通常对于编写底层代码很有用（例如二进制编码的解析器）， 但由于在高级别的上下文中使用了 `switch`，其容易出错的性质明显超过了其灵活性。 
+例如，在下面的代码中，这么多的 `break` 语句显得很没有必要, 而且很冗长，并且这种排版效果也容易引起调试问题, 但如果少写了 `break` 语句又会导致某些意料之外的结果。
 
 ```java
 switch (day) {
@@ -71,7 +75,9 @@ switch (day) {
 }
 ```
 
-We propose to introduce a new form of switch label, "`case L ->`", to signify that only the code to the right of the label is to be executed if the label is matched. We also propose to allow multiple constants per case, separated by commas. The previous code can now be written:
+我们提议引入一种新的`switch`标签格式:  "`case L ->`", 用来代表: 只有匹配到标签，才执行标签右侧的代码。 
+我们还提议每个 `case` 允许多个常量，用英文逗号分隔。 
+前面的代码现在可以写成：
 
 ```java
 switch (day) {
@@ -82,24 +88,33 @@ switch (day) {
 }
 ```
 
-The code to the right of a "`case L ->`" switch label is restricted to be an expression, a block, or (for convenience) a `throw` statement. This has the pleasing consequence that should an arm introduce a local variable, it must be contained in a block and is thus not in scope for any of the other arms in the switch block. This eliminates another annoyance with traditional switch blocks where the scope of a local variable is the entire block:
+一个 "`case L ->`" 格式的switch标签, 右侧的代码只能是:
+- 表达式
+- 块
+- 或者 `throw` 语句（为方便起见）。 
+
+这有一个令人愉快的结果，如果某个分支声明了局部变量，则必须包含在一个块中, 因此就不在 switch 块中其他任何分支的作用域范围内。 
+这消除了传统 switch 语句块的另一个弊端，因为其中局部变量的范围是整个块:
 
 ```java
 switch (day) {
     case MONDAY:
     case TUESDAY:
-        int temp = ...     // The scope of 'temp' continues to the }
+        int temp = ...     // 'temp' 变量的作用域范围一直到右花括号 }
         break;
     case WEDNESDAY:
     case THURSDAY:
-        int temp2 = ...    // Can't call this variable 'temp'
+        int temp2 = ...    // 但这里的变量名不能再叫做 'temp'
         break;
     default:
-        int temp3 = ...    // Can't call this variable 'temp'
+        int temp3 = ...    // 这里也不能使用变量名 'temp'
 }
 ```
 
-Many existing `switch` statements are essentially simulations of `switch` expressions, where each arm either assigns to a common target variable or returns a value:
+
+现有的许多 `switch` 语句, 本质上是对 `switch` 表达式的模拟，其中每个分支:
+- 要么给一个公共变量赋值
+- 要么返回一个值
 
 ```java
 int numLetters;
@@ -124,7 +139,9 @@ switch (day) {
 }
 ```
 
-Expressing this as a statement is roundabout, repetitive, and error-prone. The author meant to express that we should compute a value of `numLetters` for each day. It should be possible to say that directly, using a `switch` *expression*, which is both clearer and safer:
+用语句来表述这类表达式, 看起来比较绕、代码重复、而且还很容易出错。 
+上面这段代码的含义是: 我们应该为每天计算一个 `numLetters`值。 
+换成 `switch` 表达式，可以更直观，更清晰，而且更安全：
 
 ```java
 int numLetters = switch (day) {
@@ -135,7 +152,8 @@ int numLetters = switch (day) {
 };
 ```
 
-In turn, extending `switch` to support expressions raises some additional needs, such as extending flow analysis (an expression must always compute a value or complete abruptly), and allowing some case arms of a `switch` expression to throw an exception rather than yield a value.
+反过来, 扩展  `switch` 以支持表达式会引发一些额外的需求, 例如扩展流分析（表达式必须始终计算某个值或突然完成），并允许 `switch` 表达式的某些 case 分支抛出异常, 而不是生成一个值。
+
 
 ## Description
 
