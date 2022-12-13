@@ -155,11 +155,14 @@ int numLetters = switch (day) {
 反过来, 扩展  `switch` 以支持表达式会引发一些额外的需求, 例如扩展流分析（表达式必须始终计算某个值或突然完成），并允许 `switch` 表达式的某些 case 分支抛出异常, 而不是生成一个值。
 
 
-## Description
+## 描述(Description)
 
-### Arrow labels
+### 箭头格式的标签(Arrow labels)
 
-In addition to traditional "`case L :`" labels in a switch block, we define a new simplified form, with "`case L ->`" labels. If a label is matched, then only the expression or statement to the right of the arrow is executed; there is no fall through. For example, given the following `switch` statement that uses the new form of labels:
+
+除了传统 `switch` 语句块中的  "`case L :`" 标签外，我们还定义了一种新的简化形式: "`case L ->`" 标签。 
+如果匹配到某个标签，则只执行箭头右侧的表达式或语句; 没有fall through。 
+例如，给定以下使用新标签形式的 `switch` 语句：
 
 ```java
 static void howMany(int k) {
@@ -171,7 +174,7 @@ static void howMany(int k) {
 }
 ```
 
-The following code:
+如果调用下面的代码:
 
 ```java
 howMany(1);
@@ -179,7 +182,7 @@ howMany(2);
 howMany(3);
 ```
 
-results in the following output:
+输出的结果内容为:
 
 ```
 one
