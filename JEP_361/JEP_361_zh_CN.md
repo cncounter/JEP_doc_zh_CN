@@ -259,6 +259,7 @@ int result = switch (s) {
 如果范围内有一个一元方法 `yield`，那么表达式 `yield(x)` 就会有歧义（因为可以是方法调用，也可以是带括号表达式的 `yield` 语句），这种歧义在 `yield` 语句中消除了。 
 如果首选方法调用，则应该对方法进行限定，实例方法加上 `this` 来调用, 静态方法加上类名来调用。
 
+
 ### Exhaustiveness
 
 The cases of a `switch` expression must be *exhaustive*; for all possible values there must be a matching switch label. (Obviously `switch` statements are not required to be exhaustive.)
@@ -266,6 +267,15 @@ The cases of a `switch` expression must be *exhaustive*; for all possible values
 In practice this normally means that a `default` clause is required; however, in the case of an `enum` `switch` expression that covers all known constants, a `default` clause is inserted by the compiler to indicate that the `enum` definition has changed between compile-time and runtime. Relying on this implicit `default` clause insertion makes for more robust code; now when code is recompiled, the compiler checks that all cases are explicitly handled. Had the developer inserted an explicit `default` clause (as is the case today) a possible error will have been hidden.
 
 Furthermore, a `switch` expression must either complete normally with a value, or complete abruptly by throwing an exception. This has a number of consequences. First, the compiler checks that for every switch label, if it is matched then a value can be yielded.
+
+### 穷尽
+
+`switch` 表达式的情况必须*详尽*； 对于所有可能的值，必须有一个匹配的开关标签。 （显然，“switch”语句不需要详尽无遗。）
+
+实际上，这通常意味着需要一个 `default` 子句； 但是，对于涵盖所有已知常量的 `enum` `switch` 表达式，编译器会插入一个 `default` 子句以指示 `enum` 定义在编译时和运行时之间发生了变化。 依靠这种隐式的“默认”子句插入可以使代码更健壮； 现在，当重新编译代码时，编译器会检查所有情况是否都已明确处理。 如果开发人员插入了一个明确的“默认”子句（就像今天的情况一样），一个可能的错误就会被隐藏起来。
+
+此外，“switch”表达式必须要么正常完成并带有一个值，要么通过抛出异常突然完成。 这有很多后果。 首先，编译器检查每个开关标签，如果匹配则可以产生一个值。
+
 
 ```java
 int i = switch (day) {
@@ -286,6 +296,8 @@ i = switch (day) {
 
 A further consequence is that the control statements, `break`, `yield`, `return` and `continue`, cannot jump through a `switch` expression, such as in the following:
 
+进一步的后果是控制语句“break”、“yield”、“return”和“continue”不能跳过“switch”表达式，如下所示：
+
 ```java
 z: 
     for (int i = 0; i < MAX_VALUE; ++i) {
@@ -302,11 +314,13 @@ z:
     }
 ```
 
-## Dependencies
+## 依赖(Dependencies)
 
-This JEP evolved from [JEP 325](https://openjdk.java.net/jeps/325) and [JEP 354](https://openjdk.java.net/jeps/354). However, this JEP is standalone, and does not depend on those two JEPs.
 
-Future support for pattern matching, beginning with [JEP 305](https://openjdk.java.net/jeps/305), will build on this JEP.
+虽然本 JEP 提案是从 [JEP 325](https://openjdk.java.net/jeps/325) 和 [JEP 354](https://openjdk.java.net/jeps/354) 演变而来的， 
+但是，本 JEP 是独立的，不依赖于这两个 JEP。
+
+未来对模式匹配的支持，从 [JEP 305](https://openjdk.java.net/jeps/305) 开始，将建立在这个 JEP 的基础上。
 
 ## Risks and Assumptions
 
@@ -315,3 +329,11 @@ The need for a `switch` statement with `case L ->` labels is sometimes unclear. 
 - There are `switch` statements that operate by side-effects, but which are generally still "one action per label". Bringing these into the fold with new-style labels makes the statements more straightforward and less error-prone.
 - That the default control flow in a `switch` statement's block is to fall through, rather than to break out, was an unfortunate choice early in Java's history, and continues to be a matter of significant angst for developers. By addressing this for the `switch` construct in general, not just for `switch` expressions, the impact of this choice is reduced.
 - By teasing the desired benefits (expression-ness, better control flow, saner scoping) into orthogonal features, `switch` expressions and `switch` statements could have more in common. The greater the divergence between `switch` expressions and `switch` statements, the more complex the language is to learn, and the more sharp edges there are for developers to cut themselves on.
+
+## 风险和假设
+
+有时不清楚是否需要带有 `case L ->` 标签的 `switch` 语句。 以下考虑支持将其包括在内：
+
+- 有通过副作用操作的 `switch` 语句，但通常仍然是“每个标签一个动作”。 将这些与新式标签一起使用可以使语句更加直接且不易出错。
+- `switch` 语句块中的默认控制流是通过而不是突破，这在 Java 历史的早期是一个不幸的选择，并且仍然是开发人员的一个重要问题。 通过为一般的 `switch` 构造解决这个问题，而不仅仅是针对 `switch` 表达式，可以减少这种选择的影响。
+- 通过将预期的好处（表达性、更好的控制流、更健全的范围）梳理成正交特征，“switch”表达式和“switch”语句可以有更多共同点。 `switch` 表达式和 `switch` 语句之间的差异越大，学习的语言就越复杂，开发人员割伤自己的锋利边缘就越多。
