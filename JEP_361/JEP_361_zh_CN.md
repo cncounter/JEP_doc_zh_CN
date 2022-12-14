@@ -190,7 +190,7 @@ two
 many
 ```
 
-### switch表达式
+### switch表达式(switch expression)
 
 我们扩展了 `switch` 语句, 可以用作表达式。 例如，前面的 `howMany` 方法可以使用 `switch` 表达式重写，精简为只使用一个 `println`。
 
@@ -220,9 +220,9 @@ T result = switch (arg) {
 一个 `switch` 表达式是一个多重表达式(poly expression); 如果目标类型已知，则将此类型下推到每个分支。 `switch` 表达式的类型就是目标类型（如果已知）； 如果不是，则根据每个case分支的类型组合, 来推算单独的类型。
 
 
-### Yielding a value
+### 产生一个值(Yielding a value)
 
-Most `switch` expressions will have a single expression to the right of the "`case L ->`" switch label. In the event that a full block is needed, we introduce a new `yield` statement to yield a value, which becomes the value of the enclosing `switch` expression.
+大多数 `switch` 表达式, 在 "`case L ->`" 标签的右侧会有一个表达式。  如果使用一个完整的语句块，我们引入一个新的 `yield` 语句来产生一个值，该值成为封闭的 `switch` 表达式的值。
 
 ```java
 int j = switch (day) {
@@ -236,7 +236,7 @@ int j = switch (day) {
 };
 ```
 
-A `switch` expression can, like a `switch` statement, also use a traditional switch block with "`case L:`" switch labels (implying fall through semantics). In this case, values are yielded using the new `yield` statement:
+`switch` 表达式也可以像 `switch` 语句一样，使用带有 "`case L:`"  标签的传统开关块（蕴含着如果没有break,则自动滑落到下一个case）。  在这种情况下，会使用新的 `yield` 语句产生的值覆盖前一个 `yield` 语句的值 ：
 
 ```java
 int result = switch (s) {
@@ -250,9 +250,14 @@ int result = switch (s) {
 };
 ```
 
-The two statements, `break` (with or without a label) and `yield`, facilitate easy disambiguation between `switch` statements and `switch` expressions: a `switch` statement but not a `switch` expression can be the target of a `break` statement; and a `switch` expression but not a `switch` statement can be the target of a `yield` statement.
 
-Rather than being a keyword, `yield` is a restricted identifier (like `var`), which means that classes named `yield` are illegal. If there is a unary method `yield` in scope, then the expression `yield(x)` would be ambiguous (could be either a method call, or a yield statement whose operand is a parenthesized expression), and this ambiguity is resolved in favor of the yield statement. If the method invocation is preferred then the method should be qualified, with `this` for an instance method or the class name for a static method.
+不管带不带标签的方式, `break` 语句和 `yield` 语句都有助于消除歧义: 
+- `switch` 语句可以作为 `break` 语句的目标, 但 `switch` 表达式不行；
+- `switch` 表达式可以作为 `yield` 语句的目标, 但 `switch` 语句则不支持。
+
+`yield` 不是关键字，而是一个受限标识符（如 `var`), 如果将某个类命名为 `yield` 则是非法的。 
+如果范围内有一个一元方法 `yield`，那么表达式 `yield(x)` 就会有歧义（因为可以是方法调用，也可以是带括号表达式的 `yield` 语句），这种歧义在 `yield` 语句中消除了。 
+如果首选方法调用，则应该对方法进行限定，实例方法加上 `this` 来调用, 静态方法加上类名来调用。
 
 ### Exhaustiveness
 
