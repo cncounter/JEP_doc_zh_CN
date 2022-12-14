@@ -190,9 +190,10 @@ two
 many
 ```
 
-### Switch expressions
+### switch表达式
 
-We extend the `switch` statement so it can be used as an expression. For example, the previous `howMany` method can be rewritten to use a `switch` expression, so it uses only a single `println`.
+我们扩展了 `switch` 语句, 可以用作表达式。 例如，前面的 `howMany` 方法可以使用 `switch` 表达式重写，精简为只使用一个 `println`。
+
 
 ```java
 static void howMany(int k) {
@@ -206,7 +207,7 @@ static void howMany(int k) {
 }
 ```
 
-In the common case, a `switch` expression will look like:
+在一般情况下，`switch` 表达式的语法格式如下所示:
 
 ```java
 T result = switch (arg) {
@@ -216,7 +217,8 @@ T result = switch (arg) {
 };
 ```
 
-A `switch` expression is a poly expression; if the target type is known, this type is pushed down into each arm. The type of a `switch` expression is its target type, if known; if not, a standalone type is computed by combining the types of each case arm.
+一个 `switch` 表达式是一个多重表达式(poly expression); 如果目标类型已知，则将此类型下推到每个分支。 `switch` 表达式的类型就是目标类型（如果已知）； 如果不是，则根据每个case分支的类型组合, 来推算单独的类型。
+
 
 ### Yielding a value
 
